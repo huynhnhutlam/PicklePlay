@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:get_it/get_it.dart';
 import 'package:pickle_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:pickle_app/features/auth/presentation/bloc/auth_event.dart';
 import 'package:pickle_app/features/auth/presentation/pages/login_page.dart';
