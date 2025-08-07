@@ -92,64 +92,64 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
     required String password,
     required String name,
   }) async {
-    try {
-      developer.log(
-        'Creating new user account for: $email',
-        name: 'SupabaseAuth',
-      );
+    // try {
+    developer.log(
+      'Creating new user account for: $email',
+      name: 'SupabaseAuth',
+    );
 
-      // Create user in Auth
-      final response = await _authClient.signUp(
-        email: email.trim(),
-        password: password,
-        emailRedirectTo: 'io.supabase.pickleapp://login-callback',
-        data: {
-          'full_name': name.trim(),
-          'avatar_url': '',
-          'updated_at': DateTime.now().toIso8601String(),
-        },
-      );
-
-      if (response.user == null) {
-        throw ServerException('Failed to create user account');
-      }
-
-      // Create user profile in database
-      await _createUserProfile(
-        userId: response.user!.id,
-        email: email,
-        name: name,
-      );
-
-      developer.log(
-        'User account created: ${response.user!.email}',
-        name: 'SupabaseAuth',
-      );
-
-      return UserModel.fromSupabaseUser(response.user!);
-    } on supabase.PostgrestException catch (e) {
-      developer.log(
-        'Database error during sign up: ${e.message}',
-        error: e,
-        name: 'SupabaseAuth',
-      );
-      throw ServerException('Failed to create user profile');
-    } on supabase.AuthException catch (e) {
-      developer.log(
-        'Auth error during sign up: ${e.message}',
-        error: e,
-        name: 'SupabaseAuth',
-      );
-      throw ServerException(_mapAuthError(e.message));
-    } catch (e, stackTrace) {
-      developer.log(
-        'Unexpected error during sign up',
-        error: e,
-        stackTrace: stackTrace,
-        name: 'SupabaseAuth',
-      );
-      throw ServerException('An unexpected error occurred');
+    // Create user in Auth
+    final response = await _authClient.signUp(
+      email: email.trim(),
+      password: password,
+      emailRedirectTo: 'io.supabase.pickleapp://login-callback',
+      data: {
+        'name': name.trim(),
+        'avatar_url': '',
+        'updated_at': DateTime.now().toIso8601String(),
+      },
+    );
+    print(response.user?.toJson());
+    if (response.user == null) {
+      throw ServerException('Failed to create user account');
     }
+
+    // Create user profile in database
+    await _createUserProfile(
+      userId: response.user!.id,
+      email: email,
+      name: name,
+    );
+
+    developer.log(
+      'User account created: ${response.user!.email}',
+      name: 'SupabaseAuth',
+    );
+
+    return UserModel.fromSupabaseUser(response.user!);
+    // } on supabase.PostgrestException catch (e) {
+    //   developer.log(
+    //     'Database error during sign up: ${e.message}',
+    //     error: e,
+    //     name: 'SupabaseAuth',
+    //   );
+    //   throw ServerException('Failed to create user profile');
+    // } on supabase.AuthException catch (e) {
+    //   developer.log(
+    //     'Auth error during sign up: ${e.message}',
+    //     error: e,
+    //     name: 'SupabaseAuth',
+    //   );
+    //   throw ServerException(_mapAuthError(e.message));
+    // } catch (e, stackTrace) {
+    //   developer.log(
+    //     'Unexpected error during sign up',
+    //     error: e,
+    //     stackTrace: stackTrace,
+    //     name: 'SupabaseAuth',
+    //   );
+    //   throw ServerException('An unexpected error occurred');
+    // }
   }
 
   // @override
@@ -286,7 +286,7 @@ class SupabaseAuthRemoteDataSource implements AuthRemoteDataSource {
     await _supabaseClient.from('profiles').upsert({
       'id': userId,
       'email': email,
-      'full_name': name,
+      'name': name,
       'avatar_url': avatarUrl,
       'updated_at': DateTime.now().toIso8601String(),
     });

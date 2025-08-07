@@ -86,7 +86,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ),
     );
 
-    _handleAuthResult(result, emit);
+    result.fold(
+      (failure) => emit(
+        state.copyWith(status: AuthStatus.failure, error: failure.toString()),
+      ),
+      (user) => emit(
+        state.copyWith(status: AuthStatus.registrationSuccess, user: user),
+      ),
+    );
   }
 
   // Future<void> _onSignInWithGoogleRequested(

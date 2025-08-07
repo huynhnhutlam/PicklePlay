@@ -36,18 +36,18 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
     required String name,
   }) async {
-    try {
-      final user = await remoteDataSource.signUpWithEmailAndPassword(
-        email: email,
-        password: password,
-        name: name,
-      );
-      return Right(user.toEntity());
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.toString()));
-    } on Exception catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
+    // try {
+    final user = await remoteDataSource.signUpWithEmailAndPassword(
+      email: email,
+      password: password,
+      name: name,
+    );
+    return Right(user.toEntity());
+    // } on ServerException catch (e) {
+    //   return Left(ServerFailure(e.toString()));
+    // } on Exception catch (e) {
+    //   return Left(ServerFailure(e.toString()));
+    // }
   }
 
   // @override

@@ -59,6 +59,24 @@ class RequiredField<T> extends FormzInput<T, RequiredFieldValidationError> {
   }
 }
 
+// Name validation
+enum NameValidationError { invalid }
+
+class Name extends FormzInput<String, NameValidationError> {
+  const Name.pure() : super.pure('');
+  const Name.dirty([String value = '']) : super.dirty(value);
+
+  static const _minNameLength = 2;
+
+  @override
+  NameValidationError? validator(String? value) {
+    final trimmedValue = (value ?? '').trim();
+    return trimmedValue.length >= _minNameLength
+        ? null
+        : NameValidationError.invalid;
+  }
+}
+
 // Phone number validation
 enum PhoneNumberValidationError { invalid }
 
@@ -84,4 +102,5 @@ extension ValidationMessages on String {
   static String get password => 'Password must be at least 6 characters long';
   static String get required => 'This field is required';
   static String get phone => 'Please enter a valid phone number';
+  static String get name => 'Name must be at least 2 characters long';
 }

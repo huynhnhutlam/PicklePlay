@@ -1,7 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:pickle_app/features/auth/domain/entities/user_entity.dart';
 
-enum AuthStatus { initial, loading, authenticated, unauthenticated, failure }
+enum AuthStatus {
+  initial,
+  loading,
+  authenticated,
+  unauthenticated,
+  failure,
+  registrationSuccess,
+}
 
 class AuthState extends Equatable {
   final AuthStatus status;
@@ -32,7 +39,8 @@ class AuthState extends Equatable {
     );
   }
 
-  bool get isAuthenticated => status == AuthStatus.authenticated && user != null;
+  bool get isAuthenticated =>
+      status == AuthStatus.authenticated && user != null;
   bool get isUnauthenticated => status == AuthStatus.unauthenticated;
   bool get isLoading => status == AuthStatus.loading;
   bool get hasError => status == AuthStatus.failure && error != null;
