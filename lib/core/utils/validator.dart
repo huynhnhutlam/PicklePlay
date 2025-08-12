@@ -5,7 +5,7 @@ enum EmailValidationError { invalid }
 
 class Email extends FormzInput<String, EmailValidationError> {
   const Email.pure() : super.pure('');
-  const Email.dirty([String value = '']) : super.dirty(value);
+  const Email.dirty([super.value = '']) : super.dirty();
 
   static final _emailRegex = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?$",
@@ -24,7 +24,7 @@ enum PasswordValidationError { invalid }
 
 class Password extends FormzInput<String, PasswordValidationError> {
   const Password.pure() : super.pure('');
-  const Password.dirty([String value = '']) : super.dirty(value);
+  const Password.dirty([super.value = '']) : super.dirty();
 
   static const _minPasswordLength = 6;
 
@@ -64,7 +64,7 @@ enum NameValidationError { invalid }
 
 class Name extends FormzInput<String, NameValidationError> {
   const Name.pure() : super.pure('');
-  const Name.dirty([String value = '']) : super.dirty(value);
+  const Name.dirty([super.value = '']) : super.dirty();
 
   static const _minNameLength = 2;
 
@@ -82,7 +82,7 @@ enum PhoneNumberValidationError { invalid }
 
 class PhoneNumber extends FormzInput<String, PhoneNumberValidationError> {
   const PhoneNumber.pure() : super.pure('');
-  const PhoneNumber.dirty([String value = '']) : super.dirty(value);
+  const PhoneNumber.dirty([super.value = '']) : super.dirty();
 
   static final _phoneRegex = RegExp(
     r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$',

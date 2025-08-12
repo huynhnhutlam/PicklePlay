@@ -4,6 +4,8 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pickle_app/core/error/exceptions.dart';
 import 'package:pickle_app/core/error/failures.dart';
+import 'package:pickle_app/core/models/base_list_model.dart';
+import 'package:pickle_app/core/network/network_client.dart';
 import 'package:pickle_app/core/network/supabase_client.dart' as core;
 import 'package:pickle_app/features/venue/data/datasources/remote/venue_remote_datasource.dart';
 import 'package:pickle_app/features/venue/data/models/venue_model.dart';
@@ -12,8 +14,10 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 @Injectable(as: VenueRemoteDataSource)
 class VenueRemoteDataSourceImpl implements VenueRemoteDataSource {
   final supabase.SupabaseClient _supabaseClient;
+  final NetworkClient _networkClient;
 
-  VenueRemoteDataSourceImpl() : _supabaseClient = core.SupabaseClient.client;
+  VenueRemoteDataSourceImpl(this._networkClient)
+    : _supabaseClient = core.SupabaseClient.client;
 
   @override
   Future<Either<Failure, List<VenueModel>>> getVenues({
@@ -27,12 +31,11 @@ class VenueRemoteDataSourceImpl implements VenueRemoteDataSource {
     try {
       // Build the base query
       final query = _supabaseClient.from('venues').select('*');
-
       // Apply search filter if provided
+
       if (searchQuery != null && searchQuery.isNotEmpty) {
         query.or('name.ilike.%$searchQuery%,address.ilike.%$searchQuery%');
       }
-
       // Apply ordering
       query.order('created_at', ascending: false);
 
@@ -59,8 +62,6 @@ class VenueRemoteDataSourceImpl implements VenueRemoteDataSource {
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
       developer.log(
         'Error getting venues',
         error: e,
@@ -247,6 +248,28 @@ class VenueRemoteDataSourceImpl implements VenueRemoteDataSource {
         name: 'VenueRemoteDataSource',
       );
       return Left(ServerFailure('Failed to load nearby venues'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<VenueModel>>> getAllVenues() async {
+    try {
+      final response = await _networkClient.dio.get('/venues');
+      final baseListModel = BaseListModel<VenueModel>.fromJson(
+        response.data,
+        (json) => VenueModel.fromJson(json as Map<String, dynamic>),
+      );
+      return Right(baseListModel.items ?? []);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e, stackTrace) {
+      developer.log(
+        'Error getting all venues',
+        error: e,
+        stackTrace: stackTrace,
+        name: 'VenueRemoteDataSource',
+      );
+      return Left(ServerFailure('Failed to load venues'));
     }
   }
 }

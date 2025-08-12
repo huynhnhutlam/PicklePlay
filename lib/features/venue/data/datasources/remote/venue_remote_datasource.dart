@@ -37,4 +37,6 @@ abstract class VenueRemoteDataSource {
     required double longitude,
     double radiusKm = 10.0,
   });
+
+  Future<Either<Failure, List<VenueModel>>> getAllVenues();
 }

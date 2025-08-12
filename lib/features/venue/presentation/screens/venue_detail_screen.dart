@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pickle_app/features/venue/domain/entities/venue_entity.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_bloc.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_event.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_state.dart';
+import 'package:pickle_app/features/venue/presentation/bloc/venue_detail/venue_detail_bloc.dart';
 
 class VenueDetailScreen extends StatelessWidget {
   static const routeName = '/venue-detail';
@@ -26,34 +24,34 @@ class VenueDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocConsumer<VenueBloc, VenueState>(
+      body: BlocConsumer<VenueDetailBloc, VenueDetailState>(
         listener: (context, state) {
-          if (state is VenueFailureState) {
+          if (state is VenueDetailFailed) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            ).showSnackBar(SnackBar(content: Text(state.message ?? '')));
           }
         },
         builder: (context, state) {
-          if (state is VenueLoading) {
+          if (state is VenueDetailLoadding) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (state is VenueDetailLoadSuccess) {
+          if (state is VenueDetailLoaded) {
             return _VenueDetailView(venue: state.venue);
           }
 
-          if (state is VenueFailureState) {
+          if (state is VenueDetailFailed) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(state.message),
+                  Text(state.message ?? ''),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<VenueBloc>().add(
-                        LoadVenueDetail(id: venueId),
+                      context.read<VenueDetailBloc>().add(
+                        LoadVenueDetailEvent(id: int.parse(venueId)),
                       );
                     },
                     child: const Text('Retry'),
@@ -131,7 +129,7 @@ class _VenueDetailView extends StatelessWidget {
                   const Icon(Icons.star, color: Colors.amber, size: 20),
                   const SizedBox(width: 4),
                   Text(
-                    '${venue.rating!.toStringAsFixed(1)}',
+                    venue.rating!.toStringAsFixed(1),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(width: 16),

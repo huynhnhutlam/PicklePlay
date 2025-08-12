@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pickle_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:pickle_app/features/auth/presentation/pages/login_page.dart';
 import 'package:pickle_app/features/auth/presentation/pages/register_page.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_bloc.dart';
+import 'package:pickle_app/features/venue/presentation/bloc/venue_list/venue_bloc.dart';
 import 'package:pickle_app/features/venue/presentation/screens/venues_list_screen.dart';
 
 class AppRouter {

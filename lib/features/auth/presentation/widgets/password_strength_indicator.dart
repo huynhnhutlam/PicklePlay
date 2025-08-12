@@ -78,7 +78,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final strength = _getPasswordStrength();
+    // final strength = _getPasswordStrength();
     final color = _getStrengthColor();
     final text = _getStrengthText();
     final percentage = _getStrengthPercentage();

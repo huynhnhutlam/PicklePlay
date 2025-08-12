@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:pickle_app/features/venue/domain/entities/venue_entity.dart';
+part of 'venue_bloc.dart';
 
 abstract class VenueEvent extends Equatable {
   const VenueEvent();
@@ -8,81 +7,68 @@ abstract class VenueEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadVenues extends VenueEvent {
+class LoadVenuesEvent extends VenueEvent {
   final String? searchQuery;
   final int? limit;
   final int? offset;
 
-  const LoadVenues({
-    this.searchQuery,
-    this.limit,
-    this.offset,
-  });
+  const LoadVenuesEvent({this.searchQuery, this.limit, this.offset});
 
   @override
   List<Object?> get props => [searchQuery, limit, offset];
 }
 
-class LoadVenueDetail extends VenueEvent {
-  final String id;
-
-  const LoadVenueDetail({required this.id});
-
-  @override
-  List<Object?> get props => [id];
-}
-
-class CreateVenue extends VenueEvent {
+class CreateVenueEvent extends VenueEvent {
   final VenueEntity venue;
 
-  const CreateVenue({required this.venue});
+  const CreateVenueEvent({required this.venue});
 
   @override
   List<Object?> get props => [venue];
 }
 
-class UpdateVenue extends VenueEvent {
+class UpdateVenueEvent extends VenueEvent {
   final VenueEntity venue;
 
-  const UpdateVenue({required this.venue});
+  const UpdateVenueEvent({required this.venue});
 
   @override
   List<Object?> get props => [venue];
 }
 
-class DeleteVenue extends VenueEvent {
+class DeleteVenueEvent extends VenueEvent {
   final String id;
 
-  const DeleteVenue({required this.id});
+  const DeleteVenueEvent({required this.id});
 
   @override
   List<Object?> get props => [id];
 }
 
-class SearchVenues extends VenueEvent {
+class SearchVenuesEvent extends VenueEvent {
   final String query;
 
-  const SearchVenues({required this.query});
+  const SearchVenuesEvent({required this.query});
 
   @override
   List<Object?> get props => [query];
 }
 
-class LoadVenuesByOwner extends VenueEvent {
+class LoadVenuesByOwnerEvent extends VenueEvent {
   final String ownerId;
 
-  const LoadVenuesByOwner({required this.ownerId});
+  const LoadVenuesByOwnerEvent({required this.ownerId});
 
   @override
   List<Object?> get props => [ownerId];
 }
 
-class LoadNearbyVenues extends VenueEvent {
+class LoadNearbyVenuesEvent extends VenueEvent {
   final double latitude;
   final double longitude;
   final double radiusKm;
 
-  const LoadNearbyVenues({
+  const LoadNearbyVenuesEvent({
     required this.latitude,
     required this.longitude,
     this.radiusKm = 10.0,

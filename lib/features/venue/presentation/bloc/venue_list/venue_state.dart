@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:pickle_app/features/venue/domain/entities/venue_entity.dart';
+part of 'venue_bloc.dart';
 
 abstract class VenueState extends Equatable {
   const VenueState();
@@ -46,15 +45,6 @@ class VenueFailureState extends VenueState {
 
   @override
   List<Object?> get props => [message];
-}
-
-class VenueDetailLoadSuccess extends VenueState {
-  final VenueEntity venue;
-
-  const VenueDetailLoadSuccess({required this.venue});
-
-  @override
-  List<Object?> get props => [venue];
 }
 
 class VenueOperationInProgress extends VenueState {}

@@ -15,28 +15,28 @@ abstract class Failure extends Equatable {
 
 // General failures
 class ServerFailure extends Failure {
-  const ServerFailure(String message, {String? code}) : super(message, code: code);
+  const ServerFailure(super.message, {super.code});
 }
 
 class CacheFailure extends Failure {
-  const CacheFailure(String message, {String? code}) : super(message, code: code);
+  const CacheFailure(super.message, {super.code});
 }
 
 class NetworkFailure extends Failure {
-  const NetworkFailure(String message) : super(message);
+  const NetworkFailure(super.message);
 }
 
 class ValidationFailure extends Failure {
-  const ValidationFailure(String message) : super(message);
+  const ValidationFailure(super.message);
 }
 
 class PermissionFailure extends Failure {
-  const PermissionFailure(String message) : super(message);
+  const PermissionFailure(super.message);
 }
 
 // Auth failures
 class AuthFailure extends Failure {
-  const AuthFailure(String message) : super(message);
+  const AuthFailure(super.message);
 }
 
 class EmailAlreadyInUseFailure extends AuthFailure {
@@ -61,7 +61,7 @@ class WrongPasswordFailure extends AuthFailure {
 
 // Booking failures
 class BookingFailure extends Failure {
-  const BookingFailure(String message) : super(message);
+  const BookingFailure(super.message);
 }
 
 class SlotNotAvailableFailure extends BookingFailure {
@@ -70,10 +70,10 @@ class SlotNotAvailableFailure extends BookingFailure {
 
 // Profile failures
 class ProfileFailure extends Failure {
-  const ProfileFailure(String message) : super(message);
+  const ProfileFailure(super.message);
 }
 
 // Venue failures
 class VenueFailure extends Failure {
-  const VenueFailure(String message) : super(message);
+  const VenueFailure(super.message);
 }

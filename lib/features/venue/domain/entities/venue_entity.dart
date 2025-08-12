@@ -9,8 +9,8 @@ class VenueEntity extends Equatable {
   final int? totalReviews;
   final String? fullAddress;
   final String? description;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  final String? createdAt;
+  final String? updatedAt;
   final String? ownerId;
 
   const VenueEntity({

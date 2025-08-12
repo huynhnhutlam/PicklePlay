@@ -24,6 +24,18 @@ class GetVenues implements UseCase<List<VenueEntity>, VenueParams> {
   }
 }
 
+@Injectable()
+class GetAllVenues implements UseCase<List<VenueEntity>, void> {
+  final VenueRepository repository;
+
+  const GetAllVenues(this.repository);
+
+  @override
+  Future<Either<Failure, List<VenueEntity>>> call(void params) async {
+    return await repository.getAllVenues();
+  }
+}
+
 class VenueParams {
   final String? searchQuery;
   final double? latitude;

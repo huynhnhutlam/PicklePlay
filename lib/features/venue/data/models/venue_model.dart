@@ -40,6 +40,7 @@ abstract class VenueModel with _$VenueModel {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() => _$VenueModelToJson(this);
 }
 

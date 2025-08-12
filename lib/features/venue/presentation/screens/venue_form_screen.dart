@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pickle_app/features/venue/domain/entities/venue_entity.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_bloc.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_event.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_state.dart';
+import 'package:pickle_app/features/venue/presentation/bloc/venue_list/venue_bloc.dart';
 
 class VenueFormScreen extends StatefulWidget {
   static const routeName = '/venue-form';
@@ -73,9 +71,9 @@ class _VenueFormScreenState extends State<VenueFormScreen> {
       );
 
       if (widget.venue == null) {
-        context.read<VenueBloc>().add(CreateVenue(venue: venue));
+        context.read<VenueBloc>().add(CreateVenueEvent(venue: venue));
       } else {
-        context.read<VenueBloc>().add(UpdateVenue(venue: venue));
+        context.read<VenueBloc>().add(UpdateVenueEvent(venue: venue));
       }
     }
   }

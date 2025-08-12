@@ -1,12 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pickle_app/app_router.dart';
 import 'package:pickle_app/core/di/injection.dart';
 import 'package:pickle_app/core/network/supabase_client.dart';
+import 'package:pickle_app/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   configureDependencies();
   try {
     // Load environment variables
@@ -18,7 +20,7 @@ Future<void> main() async {
 
     print('Supabase URL: $supabaseUrl');
     print(
-      'Supabase Anon Key: ${supabaseAnonKey.isNotEmpty ? '***' + supabaseAnonKey.substring(supabaseAnonKey.length - 4) : 'NOT FOUND'}',
+      'Supabase Anon Key: ${supabaseAnonKey.isNotEmpty ? '***${supabaseAnonKey.substring(supabaseAnonKey.length - 4)}' : 'NOT FOUND'}',
     );
 
     if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
@@ -30,8 +32,6 @@ Future<void> main() async {
       supabaseUrl: supabaseUrl,
       supabaseAnonKey: supabaseAnonKey,
     );
-
-    print('✅ App initialization completed');
   } catch (e, stackTrace) {
     print('❌ Error initializing app: $e');
     print('📜 Stack trace: $stackTrace');

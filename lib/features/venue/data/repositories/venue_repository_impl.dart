@@ -139,4 +139,18 @@ class VenueRepositoryImpl implements VenueRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<VenueEntity>>> getAllVenues() async {
+    try {
+      final result = await remoteDataSource.getAllVenues();
+      return result.fold(
+        (failure) => Left(failure),
+        (models) => Right(models.map((model) => model.toEntity()).toList()),
+      );
+    } catch (e) {
+      print(e.toString());
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

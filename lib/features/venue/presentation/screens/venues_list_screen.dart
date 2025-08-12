@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_bloc.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_event.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_state.dart';
+import 'package:pickle_app/features/venue/presentation/bloc/venue_list/venue_bloc.dart';
 import 'package:pickle_app/features/venue/presentation/widgets/venue_card.dart';
 
 class VenuesListScreen extends StatefulWidget {
@@ -24,7 +22,7 @@ class _VenuesListScreenState extends State<VenuesListScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    context.read<VenueBloc>().add(const LoadVenues());
+    context.read<VenueBloc>().add(const LoadVenuesEvent());
   }
 
   @override
@@ -40,16 +38,18 @@ class _VenuesListScreenState extends State<VenuesListScreen> {
     });
 
     if (query.isEmpty) {
-      context.read<VenueBloc>().add(const LoadVenues());
+      context.read<VenueBloc>().add(const LoadVenuesEvent());
     } else {
-      context.read<VenueBloc>().add(SearchVenues(query: query));
+      context.read<VenueBloc>().add(SearchVenuesEvent(query: query));
     }
   }
 
   void _onScroll() {
     if (_isBottom) {
       context.read<VenueBloc>().add(
-        LoadVenues(searchQuery: _searchQuery.isNotEmpty ? _searchQuery : null),
+        LoadVenuesEvent(
+          searchQuery: _searchQuery.isNotEmpty ? _searchQuery : null,
+        ),
       );
     }
   }
