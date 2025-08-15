@@ -102,7 +102,7 @@ class RegisterPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account?"),
+                      const Text('Already have an account?'),
                       TextButton(
                         onPressed: () {
                           context.go('/login');

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide RefreshCallback;
 import 'package:pickle_app/core/base/blocs/loadmore/base_loadmore_state.dart';
 import 'package:pickle_app/core/widget/loading/list_loading.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class LoadMoreListView<T> extends StatefulWidget {
   final LoadMoreState<T> state;

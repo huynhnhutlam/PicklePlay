@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pickle_app/features/venue/presentation/bloc/venue_list/venue_bloc.dart';
+import 'package:pickle_app/core/base/blocs/loadmore/base_loadmore_state.dart';
+import 'package:pickle_app/core/widget/loadmore/loadmore_base.dart';
+import 'package:pickle_app/features/venue/domain/entities/venue_entity.dart';
+import 'package:pickle_app/features/venue/presentation/bloc/venue_list/venue_cubit.dart';
 import 'package:pickle_app/features/venue/presentation/widgets/venue_card.dart';
 
 class VenuesListScreen extends StatefulWidget {
@@ -21,8 +24,7 @@ class _VenuesListScreenState extends State<VenuesListScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
-    context.read<VenueBloc>().add(const LoadVenuesEvent());
+    context.read<VenueListCubit>().fetchFirstPage();
   }
 
   @override
@@ -38,27 +40,12 @@ class _VenuesListScreenState extends State<VenuesListScreen> {
     });
 
     if (query.isEmpty) {
-      context.read<VenueBloc>().add(const LoadVenuesEvent());
+      context.read<VenueListCubit>().fetchFirstPage();
     } else {
-      context.read<VenueBloc>().add(SearchVenuesEvent(query: query));
-    }
-  }
-
-  void _onScroll() {
-    if (_isBottom) {
-      context.read<VenueBloc>().add(
-        LoadVenuesEvent(
-          searchQuery: _searchQuery.isNotEmpty ? _searchQuery : null,
-        ),
+      context.read<VenueListCubit>().fetchFirstPage(
+        filters: {'searchQuery': query},
       );
     }
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
   }
 
   @override
@@ -78,9 +65,12 @@ class _VenuesListScreenState extends State<VenuesListScreen> {
                 onChanged: _onSearchChanged,
               )
             : const Text('Venues'),
+        backgroundColor: Theme.of(context).primaryColor,
+        titleTextStyle: const TextStyle(color: Colors.white),
         actions: [
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
+            color: Colors.white,
             onPressed: () {
               setState(() {
                 if (_isSearching) {
@@ -91,42 +81,39 @@ class _VenuesListScreenState extends State<VenuesListScreen> {
               });
             },
           ),
-          IconButton(icon: const Icon(Icons.add), onPressed: () async {}),
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            color: Colors.white,
+            onPressed: () {
+              // TODO: Implement notifications
+            },
+          ),
         ],
       ),
-      body: BlocConsumer<VenueBloc, VenueState>(
+      body: BlocConsumer<VenueListCubit, LoadMoreState<VenueEntity>>(
         listener: (context, state) {
-          if (state is VenueFailureState) {
+          if (state is LoadMoreError) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            ).showSnackBar(SnackBar(content: Text('Error')));
           }
         },
         builder: (context, state) {
-          if (state is VenueLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state is VenueLoadSuccess) {
-            if (state.venues.isEmpty) {
-              return const Center(child: Text('No venues found'));
-            }
-
-            return ListView.builder(
-              controller: _scrollController,
-              itemCount: state.hasReachedMax
-                  ? state.venues.length
-                  : state.venues.length + 1,
-              itemBuilder: (context, index) {
-                if (index >= state.venues.length) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return VenueCard(venue: state.venues[index], onTap: () {});
-              },
-            );
-          }
-
-          return const Center(child: Text('Something went wrong'));
+          return LoadMoreListView<VenueEntity>(
+            state: state,
+            onLoadMore: () {
+              context.read<VenueListCubit>().fetchNextPage();
+            },
+            onRetry: () {
+              context.read<VenueListCubit>().fetchFirstPage();
+            },
+            onRefresh: () async {
+              context.read<VenueListCubit>().refresh();
+            },
+            itemBuilder: (context, item, index) {
+              return VenueCard(venue: item, onTap: () {});
+            },
+          );
         },
       ),
     );

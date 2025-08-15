@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
           // Handle navigation on success
           if (state.status == AuthStatus.authenticated) {
             // Navigation will be handled by the auth state changes
-            context.go('/venues');
+            context.go('/home');
           }
         },
         builder: (context, state) {

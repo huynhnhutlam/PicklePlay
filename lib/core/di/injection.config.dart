@@ -51,7 +51,9 @@ import 'package:pickle_app/features/venue/domain/usecases/search_venues.dart'
 import 'package:pickle_app/features/venue/domain/usecases/update_venue.dart'
     as _i636;
 import 'package:pickle_app/features/venue/presentation/bloc/venue_list/venue_bloc.dart'
-    as _i1018;
+    as _i1069;
+import 'package:pickle_app/features/venue/presentation/bloc/venue_list/venue_cubit.dart'
+    as _i99;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -61,7 +63,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.factory<_i932.AuthBloc>(() => _i932.AuthBloc());
-    gh.factory<_i1018.VenueBloc>(() => _i1018.VenueBloc());
+    gh.factory<_i1069.VenueBloc>(() => _i1069.VenueBloc());
     gh.lazySingleton<_i383.NetworkClient>(() => _i383.NetworkClient());
     gh.factory<_i692.AuthRemoteDataSource>(
       () => _i821.SupabaseAuthRemoteDataSource(),
@@ -118,6 +120,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i661.GetVenue>(
       () => _i661.GetVenue(gh<_i529.VenueRepository>()),
+    );
+    gh.factory<_i99.VenueListCubit>(
+      () => _i99.VenueListCubit(
+        getVenues: gh<_i450.GetVenues>(),
+        pageSize: gh<int>(),
+      ),
     );
     return this;
   }
